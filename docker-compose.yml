@@ -39,7 +39,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD:-commission_password}
       - MYSQL_HOST=mysql
       - MYSQL_PORT=3306
-      - ALLOWED_HOSTS=localhost,127.0.0.1,backend
+      - ALLOWED_HOSTS=localhost,127.0.0.1,backend,80.225.237.255
       - CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,http://localhost,http://frontend
     ports:
       - "8000:8000"
