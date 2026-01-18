@@ -51,6 +51,17 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user = User.objects.create(**validated_data)
         user.set_password(password)
         user.save()
+        
+        # Create Artist profile if user is registering as an artist
+        if user.role == User.Role.ARTIST:
+            from apps.artists.models import Artist
+            Artist.objects.create(
+                user=user,
+                display_name=f"{user.first_name} {user.last_name}".strip() or user.username,
+                specialty="General",  # Default specialty
+                status=Artist.Status.PENDING,
+            )
+        
         return user
 
 
