@@ -9,17 +9,22 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false)
   const { login } = useAuthStore()
   const navigate = useNavigate()
-  
+
   const { register, handleSubmit, formState: { errors } } = useForm()
 
   const onSubmit = async (data) => {
     setIsLoading(true)
     const result = await login(data.email, data.password)
     setIsLoading(false)
-    
+
     if (result.success) {
       toast.success('Welcome back!')
-      navigate('/dashboard')
+      // Redirect based on user role
+      if (result.user?.role === 'admin') {
+        navigate('/admin')
+      } else {
+        navigate('/dashboard')
+      }
     } else {
       toast.error(result.error || 'Login failed')
     }
