@@ -55,10 +55,12 @@ export default function UserDashboard() {
             Here's what's happening with your commissions
           </p>
         </div>
-        <Link to="/commissions/new" className="btn-primary inline-flex items-center gap-2">
-          <PlusIcon className="w-5 h-5" />
-          New Commission
-        </Link>
+        {user?.role === 'client' && (
+          <Link to="/commissions/new" className="btn-primary inline-flex items-center gap-2">
+            <PlusIcon className="w-5 h-5" />
+            New Commission
+          </Link>
+        )}
       </div>
 
       {/* Stats Grid */}
@@ -102,9 +104,11 @@ export default function UserDashboard() {
           <div className="text-center py-8">
             <BriefcaseIcon className="w-12 h-12 text-morning-muted mx-auto mb-3" />
             <p className="text-morning-gray">No commissions yet</p>
-            <Link to="/commissions/new" className="text-primary-500 hover:text-primary-600 text-sm mt-2 inline-block">
-              Create your first commission
-            </Link>
+            {user?.role === 'client' && (
+              <Link to="/commissions/new" className="text-primary-500 hover:text-primary-600 text-sm mt-2 inline-block">
+                Create your first commission
+              </Link>
+            )}
           </div>
         ) : (
           <div className="space-y-3">

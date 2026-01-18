@@ -9,6 +9,7 @@ export default function NewCommission() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [loading, setLoading] = useState(false)
+  const [dataLoading, setDataLoading] = useState(true)
   const [artists, setArtists] = useState([])
   const [categories, setCategories] = useState([])
 
@@ -29,7 +30,12 @@ export default function NewCommission() {
         setArtists(artistsRes.data.results || artistsRes.data || [])
         setCategories(categoriesRes.data || [])
       } catch (error) {
-        console.error('Failed to fetch data')
+        console.error('Failed to fetch data:', error)
+        // Set empty arrays to prevent crashes
+        setArtists([])
+        setCategories([])
+      } finally {
+        setDataLoading(false)
       }
     }
     fetchData()
@@ -68,6 +74,14 @@ export default function NewCommission() {
     { value: 'high', label: 'High' },
     { value: 'urgent', label: 'Urgent (+50% fee)' },
   ]
+
+  if (dataLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
+      </div>
+    )
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
