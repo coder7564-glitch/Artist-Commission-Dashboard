@@ -4,6 +4,6 @@
 
 echo "🛑 Stopping Artist Commission Dashboard..."
 
-docker-compose down
+docker compose down
 
 echo "✅ All containers stopped."
