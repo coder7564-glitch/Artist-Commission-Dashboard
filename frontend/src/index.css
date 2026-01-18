@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Morning UI Base Styles */
+@layer base {
+  body {
+    @apply bg-morning-light text-morning-darker font-sans antialiased;
+  }
+}
+
+@layer components {
+  /* Card Component */
+  .card {
+    @apply bg-white rounded-xl shadow-morning p-6;
+  }
+  
+  .card-hover {
+    @apply card transition-shadow hover:shadow-morning-md;
+  }
+
+  /* Button Components */
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .btn-primary {
+    @apply btn bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-morning-soft text-morning-dark hover:bg-morning-muted focus:ring-morning-gray;
+  }
+  
+  .btn-outline {
+    @apply btn border border-morning-muted text-morning-dark hover:bg-morning-soft focus:ring-primary-500;
+  }
+  
+  .btn-danger {
+    @apply btn bg-accent-error text-white hover:bg-red-600 focus:ring-accent-error;
+  }
+  
+  .btn-success {
+    @apply btn bg-accent-success text-white hover:bg-emerald-600 focus:ring-accent-success;
+  }
+
+  /* Input Components */
+  .input {
+    @apply w-full px-4 py-2.5 rounded-lg border border-morning-muted bg-white text-morning-darker placeholder-morning-gray focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all;
+  }
+  
+  .input-error {
+    @apply input border-accent-error focus:ring-accent-error;
+  }
+
+  /* Label Component */
+  .label {
+    @apply block text-sm font-medium text-morning-dark mb-1.5;
+  }
+
+  /* Badge Components */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  .badge-primary {
+    @apply badge bg-primary-100 text-primary-700;
+  }
+  
+  .badge-success {
+    @apply badge bg-emerald-100 text-emerald-700;
+  }
+  
+  .badge-warning {
+    @apply badge bg-amber-100 text-amber-700;
+  }
+  
+  .badge-error {
+    @apply badge bg-red-100 text-red-700;
+  }
+  
+  .badge-gray {
+    @apply badge bg-morning-soft text-morning-dark;
+  }
+
+  /* Table Components */
+  .table-container {
+    @apply overflow-x-auto rounded-xl border border-morning-muted;
+  }
+  
+  .table {
+    @apply min-w-full divide-y divide-morning-muted;
+  }
+  
+  .table th {
+    @apply px-6 py-3 text-left text-xs font-semibold text-morning-gray uppercase tracking-wider bg-morning-soft;
+  }
+  
+  .table td {
+    @apply px-6 py-4 whitespace-nowrap text-sm text-morning-dark bg-white;
+  }
+  
+  .table tbody tr {
+    @apply border-b border-morning-muted last:border-0 hover:bg-morning-light transition-colors;
+  }
+
+  /* Sidebar Components */
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-lg text-morning-gray hover:bg-morning-soft hover:text-morning-darker transition-all;
+  }
+  
+  .sidebar-link-active {
+    @apply sidebar-link bg-primary-50 text-primary-600 font-medium;
+  }
+
+  /* Stats Card */
+  .stats-card {
+    @apply card flex items-center gap-4;
+  }
+  
+  .stats-icon {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-morning-soft;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-morning-muted rounded-full hover:bg-morning-gray;
+}
