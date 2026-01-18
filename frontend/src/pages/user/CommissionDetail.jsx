@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { commissionsAPI } from '../../services/api'
 import { useAuthStore } from '../../store/authStore'
-import { Card, Button, Badge } from '../../components/ui'
+import { Card, Button, Badge, Modal, Input } from '../../components/ui'
 import {
   ArrowLeftIcon,
   PhotoIcon,
@@ -12,6 +12,7 @@ import {
   ClockIcon,
   PencilSquareIcon,
   DocumentCheckIcon,
+  CurrencyDollarIcon,
 } from '@heroicons/react/24/outline'
 import { format } from 'date-fns'
 import toast from 'react-hot-toast'
@@ -41,6 +42,9 @@ export default function UserCommissionDetail() {
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [selectedImage, setSelectedImage] = useState(null)
+  const [showPriceModal, setShowPriceModal] = useState(false)
+  const [quotedPrice, setQuotedPrice] = useState('')
+  const [acceptLoading, setAcceptLoading] = useState(false)
   const fileInputRef = useRef(null)
 
   useEffect(() => {
@@ -65,6 +69,31 @@ export default function UserCommissionDetail() {
       fetchCommission()
     } catch (error) {
       toast.error('Failed to update status')
+    }
+  }
+
+  const handleAcceptWithPrice = async () => {
+    if (!quotedPrice || parseFloat(quotedPrice) <= 0) {
+      toast.error('Please enter a valid price')
+      return
+    }
+
+    setAcceptLoading(true)
+    try {
+      // Update commission with quoted price first
+      await commissionsAPI.updateCommission(id, {
+        quoted_price: parseFloat(quotedPrice),
+        final_price: parseFloat(quotedPrice),
+        status: 'accepted'
+      })
+      toast.success('Commission accepted with price $' + quotedPrice)
+      setShowPriceModal(false)
+      setQuotedPrice('')
+      fetchCommission()
+    } catch (error) {
+      toast.error('Failed to accept commission')
+    } finally {
+      setAcceptLoading(false)
     }
   }
 
@@ -140,7 +169,7 @@ export default function UserCommissionDetail() {
 
         {/* Action Button */}
         {commission.status === 'pending' && isArtist && (
-          <Button onClick={() => handleStatusUpdate('accepted')}>
+          <Button onClick={() => setShowPriceModal(true)}>
             Accept Commission
           </Button>
         )}
@@ -424,6 +453,65 @@ export default function UserCommissionDetail() {
             className="max-w-full max-h-[90vh] object-contain rounded-lg"
             onClick={(e) => e.stopPropagation()}
           />
+        </div>
+      )}
+
+      {/* Price Modal */}
+      {showPriceModal && (
+        <div
+          className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowPriceModal(false)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-xl bg-primary-100 flex items-center justify-center">
+                <CurrencyDollarIcon className="w-6 h-6 text-primary-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-morning-darker">Set Commission Price</h3>
+                <p className="text-sm text-morning-gray">Enter your quoted price for this commission</p>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-morning-darker mb-2">
+                Price (USD)
+              </label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-morning-gray text-lg">$</span>
+                <input
+                  type="number"
+                  min="1"
+                  step="0.01"
+                  value={quotedPrice}
+                  onChange={(e) => setQuotedPrice(e.target.value)}
+                  placeholder="0.00"
+                  className="input pl-8 text-lg font-semibold"
+                  autoFocus
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                variant="secondary"
+                className="flex-1"
+                onClick={() => setShowPriceModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="flex-1"
+                onClick={handleAcceptWithPrice}
+                loading={acceptLoading}
+              >
+                Accept & Set Price
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </div>
