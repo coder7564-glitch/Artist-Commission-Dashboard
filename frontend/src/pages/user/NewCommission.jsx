@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { commissionsAPI, artistsAPI } from '../../services/api'
-import { Card, Button, Input, Select } from '../../components/ui'
+import { Card, Button, Input } from '../../components/ui'
 import toast from 'react-hot-toast'
 
 export default function NewCommission() {
@@ -11,7 +11,7 @@ export default function NewCommission() {
   const [loading, setLoading] = useState(false)
   const [dataLoading, setDataLoading] = useState(true)
   const [artists, setArtists] = useState([])
-  const [categories, setCategories] = useState([])
+  const [error, setError] = useState(null)
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
@@ -23,17 +23,11 @@ export default function NewCommission() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [artistsRes, categoriesRes] = await Promise.all([
-          artistsAPI.getArtists({ is_accepting_commissions: true }),
-          commissionsAPI.getCategories(),
-        ])
+        const artistsRes = await artistsAPI.getArtists({ status: 'approved' })
         setArtists(artistsRes.data.results || artistsRes.data || [])
-        setCategories(categoriesRes.data || [])
-      } catch (error) {
-        console.error('Failed to fetch data:', error)
-        // Set empty arrays to prevent crashes
-        setArtists([])
-        setCategories([])
+      } catch (err) {
+        console.error('Failed to fetch artists:', err)
+        setError('Failed to load artists. Please try again.')
       } finally {
         setDataLoading(false)
       }
@@ -45,40 +39,40 @@ export default function NewCommission() {
     setLoading(true)
     try {
       await commissionsAPI.createCommission({
-        ...data,
+        title: data.title,
+        description: data.description,
         artist_id: parseInt(data.artist_id),
-        category_id: data.category_id ? parseInt(data.category_id) : null,
+        priority: data.priority,
+        requirements: data.requirements || '',
+        deadline: data.deadline || null,
       })
       toast.success('Commission request submitted!')
       navigate('/commissions')
-    } catch (error) {
+    } catch (err) {
+      console.error('Failed to create commission:', err)
       toast.error('Failed to create commission')
     } finally {
       setLoading(false)
     }
   }
 
-  const artistOptions = [
-    { value: '', label: 'Select an artist' },
-    ...artists.map(a => ({ value: a.id.toString(), label: a.display_name }))
-  ]
-
-  const categoryOptions = [
-    { value: '', label: 'Select a category' },
-    ...categories.map(c => ({ value: c.id.toString(), label: c.name }))
-  ]
-
-  const priorityOptions = [
-    { value: 'low', label: 'Low' },
-    { value: 'normal', label: 'Normal' },
-    { value: 'high', label: 'High' },
-    { value: 'urgent', label: 'Urgent (+50% fee)' },
-  ]
-
   if (dataLoading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <Card>
+          <div className="text-center py-8">
+            <p className="text-accent-error mb-4">{error}</p>
+            <Button onClick={() => window.location.reload()}>Try Again</Button>
+          </div>
+        </Card>
       </div>
     )
   }
@@ -92,18 +86,23 @@ export default function NewCommission() {
 
       <Card>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <Select
-            label="Artist *"
-            options={artistOptions}
-            error={errors.artist_id?.message}
-            {...register('artist_id', { required: 'Please select an artist' })}
-          />
-
-          <Select
-            label="Category"
-            options={categoryOptions}
-            {...register('category_id')}
-          />
+          <div>
+            <label className="label">Artist *</label>
+            <select
+              className={`input cursor-pointer ${errors.artist_id ? 'input-error' : ''}`}
+              {...register('artist_id', { required: 'Please select an artist' })}
+            >
+              <option value="">Select an artist</option>
+              {artists.map((artist) => (
+                <option key={artist.id} value={artist.id}>
+                  {artist.display_name}
+                </option>
+              ))}
+            </select>
+            {errors.artist_id && (
+              <p className="mt-1 text-sm text-accent-error">{errors.artist_id.message}</p>
+            )}
+          </div>
 
           <Input
             label="Title *"
@@ -133,11 +132,15 @@ export default function NewCommission() {
             />
           </div>
 
-          <Select
-            label="Priority"
-            options={priorityOptions}
-            {...register('priority')}
-          />
+          <div>
+            <label className="label">Priority</label>
+            <select className="input cursor-pointer" {...register('priority')}>
+              <option value="low">Low</option>
+              <option value="normal">Normal</option>
+              <option value="high">High</option>
+              <option value="urgent">Urgent (+50% fee)</option>
+            </select>
+          </div>
 
           <Input
             label="Preferred Deadline"
