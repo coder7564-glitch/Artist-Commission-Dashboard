@@ -36,7 +36,9 @@ export default function AdminUsers() {
     }
   }
 
-  const filtered = users.filter(u => 
+  // Filter out artists (they have their own section) and then apply search filter
+  const nonArtistUsers = users.filter(u => u.role !== 'artist')
+  const filtered = nonArtistUsers.filter(u =>
     u.email.toLowerCase().includes(search.toLowerCase()) ||
     u.username.toLowerCase().includes(search.toLowerCase())
   )
