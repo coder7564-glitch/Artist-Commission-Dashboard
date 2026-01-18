@@ -235,3 +235,93 @@ def commission_stats(request):
     }
     
     return Response(stats)
+
+
+class ReferenceImageUploadView(APIView):
+    """Upload reference images for a commission."""
+    
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request, pk):
+        user = request.user
+        
+        # Get commission - client or admin can upload
+        if user.role == 'admin':
+            commission = get_object_or_404(Commission, pk=pk)
+        else:
+            commission = get_object_or_404(Commission, pk=pk, client=user)
+        
+        # Get uploaded file
+        image_file = request.FILES.get('image')
+        if not image_file:
+            return Response(
+                {"error": "No image file provided"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate file type
+        allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+        if image_file.content_type not in allowed_types:
+            return Response(
+                {"error": "Invalid file type. Allowed: JPEG, PNG, GIF, WebP"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Limit file size (5MB)
+        if image_file.size > 5 * 1024 * 1024:
+            return Response(
+                {"error": "File too large. Maximum size is 5MB"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Save file
+        import os
+        from django.conf import settings
+        from django.core.files.storage import default_storage
+        import uuid
+        
+        # Generate unique filename
+        ext = os.path.splitext(image_file.name)[1]
+        filename = f"commissions/references/{commission.id}/{uuid.uuid4()}{ext}"
+        
+        # Save file
+        saved_path = default_storage.save(filename, image_file)
+        file_url = request.build_absolute_uri(f"{settings.MEDIA_URL}{saved_path}")
+        
+        # Update reference_images JSON field
+        images = commission.reference_images or []
+        images.append({
+            'url': file_url,
+            'filename': image_file.name,
+            'uploaded_at': timezone.now().isoformat(),
+        })
+        commission.reference_images = images
+        commission.save()
+        
+        return Response({
+            "message": "Image uploaded successfully",
+            "image": images[-1],
+            "total_images": len(images),
+        })
+    
+    def delete(self, request, pk):
+        """Delete a reference image."""
+        user = request.user
+        
+        if user.role == 'admin':
+            commission = get_object_or_404(Commission, pk=pk)
+        else:
+            commission = get_object_or_404(Commission, pk=pk, client=user)
+        
+        image_url = request.data.get('url')
+        if not image_url:
+            return Response(
+                {"error": "Image URL is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        images = commission.reference_images or []
+        commission.reference_images = [img for img in images if img.get('url') != image_url]
+        commission.save()
+        
+        return Response({"message": "Image deleted successfully"})

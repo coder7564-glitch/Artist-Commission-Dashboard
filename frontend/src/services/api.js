@@ -27,20 +27,20 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
-    
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
-      
+
       try {
         const refreshToken = localStorage.getItem('refresh_token')
         if (refreshToken) {
           const response = await axios.post(`${API_BASE_URL}/token/refresh/`, {
             refresh: refreshToken,
           })
-          
+
           const { access } = response.data
           localStorage.setItem('access_token', access)
-          
+
           originalRequest.headers.Authorization = `Bearer ${access}`
           return api(originalRequest)
         }
@@ -50,7 +50,7 @@ api.interceptors.response.use(
         window.location.href = '/login'
       }
     }
-    
+
     return Promise.reject(error)
   }
 )
@@ -104,6 +104,11 @@ export const commissionsAPI = {
   addRevision: (commissionId, data) => api.post(`/commissions/${commissionId}/revisions/`, data),
   // Admin
   getAdminCommissions: (params) => api.get('/commissions/admin/list/', { params }),
+  // Reference Images
+  uploadReferenceImage: (commissionId, formData) => api.post(`/commissions/${commissionId}/reference-images/`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  deleteReferenceImage: (commissionId, url) => api.delete(`/commissions/${commissionId}/reference-images/`, { data: { url } }),
 }
 
 // Payments API

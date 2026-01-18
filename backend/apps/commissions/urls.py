@@ -22,6 +22,9 @@ urlpatterns = [
     # Revisions
     path('<int:commission_id>/revisions/', views.RevisionCreateView.as_view(), name='revision-create'),
     
+    # Reference Images
+    path('<int:pk>/reference-images/', views.ReferenceImageUploadView.as_view(), name='reference-images'),
+    
     # Admin
     path('admin/list/', views.CommissionAdminListView.as_view(), name='commission-admin-list'),
 ]
