@@ -126,6 +126,8 @@ class CommissionStatusUpdateView(APIView):
             'accepted': ['in_progress', 'cancelled'],
             'in_progress': ['revision', 'completed'],
             'revision': ['in_progress', 'completed'],
+            'completed': ['out_for_delivery'],
+            'out_for_delivery': ['delivered'],
         }
         
         if commission.status in valid_transitions:

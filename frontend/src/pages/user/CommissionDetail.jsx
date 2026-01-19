@@ -16,6 +16,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { format } from 'date-fns'
 import toast from 'react-hot-toast'
+import { TruckIcon } from '@heroicons/react/24/outline'
 
 // Status configuration
 const statusConfig = {
@@ -24,6 +25,8 @@ const statusConfig = {
   in_progress: { label: 'In Progress', color: 'bg-blue-500', step: 1 },
   revision: { label: 'Review', color: 'bg-purple-500', step: 2 },
   completed: { label: 'Completed', color: 'bg-emerald-500', step: 3 },
+  out_for_delivery: { label: 'Out for Delivery', color: 'bg-orange-500', step: 4 },
+  delivered: { label: 'Delivered', color: 'bg-green-600', step: 5 },
   cancelled: { label: 'Cancelled', color: 'bg-red-500', step: -1 },
   rejected: { label: 'Rejected', color: 'bg-red-500', step: -1 },
 }
@@ -33,6 +36,8 @@ const steps = [
   { label: 'In Progress', icon: PencilSquareIcon },
   { label: 'Review', icon: DocumentCheckIcon },
   { label: 'Approved', icon: CheckCircleIcon },
+  { label: 'Out for Delivery', icon: TruckIcon },
+  { label: 'Delivered', icon: CheckCircleIcon },
 ]
 
 export default function UserCommissionDetail() {
@@ -178,9 +183,24 @@ export default function UserCommissionDetail() {
             Start Working
           </Button>
         )}
-        {commission.status === 'in_progress' && isClient && (
+        {commission.status === 'in_progress' && isArtist && (
+          <Button onClick={() => handleStatusUpdate('revision')}>
+            Submit for Review
+          </Button>
+        )}
+        {commission.status === 'revision' && isClient && (
           <Button variant="success" onClick={() => handleStatusUpdate('completed')}>
-            Approve Commission
+            Approve & Confirm
+          </Button>
+        )}
+        {commission.status === 'completed' && isArtist && (
+          <Button onClick={() => handleStatusUpdate('out_for_delivery')}>
+            Mark as Shipped
+          </Button>
+        )}
+        {commission.status === 'out_for_delivery' && isArtist && (
+          <Button variant="success" onClick={() => handleStatusUpdate('delivered')}>
+            Confirm Delivery
           </Button>
         )}
       </div>

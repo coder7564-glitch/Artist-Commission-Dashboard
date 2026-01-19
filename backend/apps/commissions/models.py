@@ -35,6 +35,8 @@ class Commission(models.Model):
         IN_PROGRESS = 'in_progress', 'In Progress'
         REVISION = 'revision', 'Revision Requested'
         COMPLETED = 'completed', 'Completed'
+        OUT_FOR_DELIVERY = 'out_for_delivery', 'Out for Delivery'
+        DELIVERED = 'delivered', 'Delivered'
         CANCELLED = 'cancelled', 'Cancelled'
         REJECTED = 'rejected', 'Rejected'
     
