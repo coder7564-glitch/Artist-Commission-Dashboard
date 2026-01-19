@@ -6,13 +6,17 @@ const variants = {
   warning: 'badge-warning',
   error: 'badge-error',
   gray: 'badge-gray',
-  purple: 'bg-purple-100 text-purple-700',
-  orange: 'bg-orange-100 text-orange-700',
+  purple: 'bg-gradient-to-r from-purple-500 to-violet-500 text-white font-medium shadow-sm shadow-purple-500/25',
+  orange: 'bg-gradient-to-r from-orange-400 to-amber-500 text-white font-medium shadow-sm shadow-orange-500/25',
 }
 
 export default function Badge({ children, variant = 'gray', className }) {
   return (
-    <span className={clsx(variants[variant], className)}>
+    <span className={clsx(
+      'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium transition-all',
+      variants[variant],
+      className
+    )}>
       {children}
     </span>
   )

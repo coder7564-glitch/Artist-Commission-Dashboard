@@ -78,14 +78,14 @@ export default function UserDashboard() {
           color="warning"
         />
         <StatsCard
-          title="Completed"
-          value={stats?.completed || 0}
+          title="Delivered"
+          value={stats?.delivered || 0}
           icon={CheckCircleIcon}
           color="success"
         />
         <StatsCard
           title={user?.role === 'artist' ? 'Total Earnings' : 'Total Spent'}
-          value={`$${stats?.total_spent || 0}`}
+          value={`$${user?.role === 'artist' ? (stats?.total_earned || 0) : (stats?.total_spent || 0)}`}
           icon={CurrencyDollarIcon}
           color="info"
         />

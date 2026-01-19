@@ -226,14 +226,19 @@ def commission_stats(request):
     
     from django.db.models import Sum, Count
     
+    # Calculate earnings from delivered orders
+    delivered_commissions = commissions.filter(status='delivered')
+    total_earnings = delivered_commissions.aggregate(total=Sum('final_price'))['total'] or 0
+    
     stats = {
         'total': commissions.count(),
         'pending': commissions.filter(status='pending').count(),
         'in_progress': commissions.filter(status='in_progress').count(),
         'completed': commissions.filter(status='completed').count(),
+        'delivered': delivered_commissions.count(),
         'cancelled': commissions.filter(status='cancelled').count(),
-        'total_spent': commissions.filter(status='completed').aggregate(
-            total=Sum('final_price'))['total'] or 0,
+        'total_spent': float(total_earnings),  # For clients - money spent
+        'total_earned': float(total_earnings),  # For artists - money earned
     }
     
     return Response(stats)
