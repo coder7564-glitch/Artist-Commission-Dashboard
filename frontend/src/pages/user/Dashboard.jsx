@@ -91,6 +91,44 @@ export default function UserDashboard() {
         />
       </div>
 
+      {/* Earnings Overview - Artists Only */}
+      {user?.role === 'artist' && (
+        <Card>
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-lg font-semibold text-morning-darker">Earnings Overview</h3>
+              <p className="text-sm text-primary-500">Last 7 months performance</p>
+            </div>
+            <div className="flex items-center gap-1 px-3 py-1.5 bg-emerald-50 rounded-lg">
+              <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              <span className="text-sm font-semibold text-emerald-600">+18.2%</span>
+            </div>
+          </div>
+
+          {/* Bar Chart */}
+          <div className="flex items-end justify-between h-40 gap-3">
+            {['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'].map((month, index) => {
+              const heights = [55, 50, 60, 65, 75, 70, 100]
+              const isCurrentMonth = index === 6
+              return (
+                <div key={month} className="flex-1 flex flex-col items-center gap-2">
+                  <div
+                    className={`w-full rounded-xl transition-all ${isCurrentMonth
+                        ? 'bg-gradient-to-t from-purple-500 to-violet-400'
+                        : 'bg-gradient-to-t from-gray-200 to-gray-100'
+                      }`}
+                    style={{ height: `${heights[index]}%` }}
+                  />
+                  <span className="text-xs text-morning-gray">{month}</span>
+                </div>
+              )
+            })}
+          </div>
+        </Card>
+      )}
+
       {/* Recent Commissions */}
       <Card>
         <div className="flex items-center justify-between mb-4">

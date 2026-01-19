@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { commissionsAPI } from '../../services/api'
+import { useAuthStore } from '../../store/authStore'
 import { Card, Button, StatusBadge, Table, TableHead, TableBody, TableRow, TableHeader, TableCell } from '../../components/ui'
 import { PlusIcon, FunnelIcon } from '@heroicons/react/24/outline'
 import { format } from 'date-fns'
 
 export default function UserCommissions() {
+  const { user } = useAuthStore()
   const [commissions, setCommissions] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
+  const isClient = user?.role === 'client'
 
   useEffect(() => {
     fetchCommissions()
@@ -40,12 +43,14 @@ export default function UserCommissions() {
           <h1 className="text-2xl font-bold text-morning-darker">My Commissions</h1>
           <p className="text-morning-gray mt-1">Track and manage your commission requests</p>
         </div>
-        <Link to="/commissions/new">
-          <Button>
-            <PlusIcon className="w-5 h-5 mr-2" />
-            New Commission
-          </Button>
-        </Link>
+        {isClient && (
+          <Link to="/commissions/new">
+            <Button>
+              <PlusIcon className="w-5 h-5 mr-2" />
+              New Commission
+            </Button>
+          </Link>
+        )}
       </div>
 
       {/* Filters */}
@@ -56,11 +61,10 @@ export default function UserCommissions() {
             <button
               key={f.value}
               onClick={() => setFilter(f.value)}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                filter === f.value
+              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${filter === f.value
                   ? 'bg-primary-500 text-white'
                   : 'bg-morning-soft text-morning-dark hover:bg-morning-muted'
-              }`}
+                }`}
             >
               {f.label}
             </button>
@@ -80,10 +84,14 @@ export default function UserCommissions() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <h3 className="text-lg font-medium text-morning-darker mb-2">No commissions found</h3>
-            <p className="text-morning-gray mb-4">Start by creating your first commission request</p>
-            <Link to="/commissions/new">
-              <Button>Create Commission</Button>
-            </Link>
+            <p className="text-morning-gray mb-4">
+              {isClient ? 'Start by creating your first commission request' : 'No commission requests yet'}
+            </p>
+            {isClient && (
+              <Link to="/commissions/new">
+                <Button>Create Commission</Button>
+              </Link>
+            )}
           </div>
         </Card>
       ) : (

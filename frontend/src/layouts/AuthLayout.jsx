@@ -33,8 +33,7 @@ export default function AuthLayout() {
               </svg>
             </div>
             <span className="text-xl font-bold text-gray-900">
-              Artist<br />
-              <span className="font-normal">Commission</span>
+              ArtistHub
             </span>
           </div>
 
