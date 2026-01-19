@@ -84,7 +84,7 @@ export default function UserDashboard() {
           color="success"
         />
         <StatsCard
-          title="Total Spent"
+          title={user?.role === 'artist' ? 'Total Earnings' : 'Total Spent'}
           value={`$${stats?.total_spent || 0}`}
           icon={CurrencyDollarIcon}
           color="info"

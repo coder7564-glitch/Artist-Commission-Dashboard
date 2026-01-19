@@ -43,8 +43,8 @@ export default function AdminReports() {
   const userGrowthData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
     datasets: [{
-      label: 'New Users',
-      data: [45, 62, 78, 95, 110, stats?.new_users_monthly || 0],
+      label: 'New Clients',
+      data: [45, 62, 78, 95, 110, stats?.new_clients_monthly || 0],
       backgroundColor: '#10b981',
     }]
   }
@@ -59,10 +59,10 @@ export default function AdminReports() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatsCard title="Total Users" value={stats?.total_users || 0} icon={UsersIcon} color="primary" />
+        <StatsCard title="Total Clients" value={stats?.total_clients || 0} icon={UsersIcon} color="primary" />
         <StatsCard title="Total Revenue" value={`$${stats?.total_revenue || 0}`} icon={CurrencyDollarIcon} color="success" />
         <StatsCard title="Commissions" value={stats?.total_commissions || 0} icon={ChartBarIcon} color="warning" />
-        <StatsCard title="New Users (30d)" value={stats?.new_users_monthly || 0} icon={ArrowTrendingUpIcon} color="info" />
+        <StatsCard title="New Clients (30d)" value={stats?.new_clients_monthly || 0} icon={ArrowTrendingUpIcon} color="info" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -71,7 +71,7 @@ export default function AdminReports() {
           <div className="mt-4 h-72"><Line data={revenueData} options={{ maintainAspectRatio: false }} /></div>
         </Card>
         <Card>
-          <CardTitle>User Growth</CardTitle>
+          <CardTitle>Client Growth</CardTitle>
           <div className="mt-4 h-72"><Bar data={userGrowthData} options={{ maintainAspectRatio: false }} /></div>
         </Card>
       </div>

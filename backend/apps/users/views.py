@@ -90,20 +90,25 @@ def dashboard_stats(request):
     
     thirty_days_ago = timezone.now() - timedelta(days=30)
     
+    # Calculate revenue from delivered commissions
+    delivered_commissions = Commission.objects.filter(status='delivered')
+    total_revenue = delivered_commissions.aggregate(total=Sum('final_price'))['total'] or 0
+    monthly_revenue = delivered_commissions.filter(
+        updated_at__gte=thirty_days_ago
+    ).aggregate(total=Sum('final_price'))['total'] or 0
+    
     stats = {
-        'total_users': User.objects.count(),
+        'total_clients': User.objects.filter(role='client').count(),
         'total_artists': Artist.objects.count(),
         'total_commissions': Commission.objects.count(),
         'pending_commissions': Commission.objects.filter(status='pending').count(),
         'active_commissions': Commission.objects.filter(status='in_progress').count(),
         'completed_commissions': Commission.objects.filter(status='completed').count(),
-        'total_revenue': Payment.objects.filter(status='completed').aggregate(
-            total=Sum('amount'))['total'] or 0,
-        'monthly_revenue': Payment.objects.filter(
-            status='completed', 
-            created_at__gte=thirty_days_ago
-        ).aggregate(total=Sum('amount'))['total'] or 0,
-        'new_users_monthly': User.objects.filter(created_at__gte=thirty_days_ago).count(),
+        'delivered_commissions': delivered_commissions.count(),
+        'total_revenue': float(total_revenue),
+        'monthly_revenue': float(monthly_revenue),
+        'new_clients_monthly': User.objects.filter(role='client', created_at__gte=thirty_days_ago).count(),
     }
     
     return Response(stats)
+
