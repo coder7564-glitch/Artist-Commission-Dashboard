@@ -202,46 +202,120 @@ export default function Landing() {
             </section>
 
             {/* Categories Section */}
-            <section id="categories" className="py-20 px-6 bg-gradient-to-b from-gray-50 to-white">
-                <div className="max-w-7xl mx-auto">
+            <section id="categories" className="py-20 px-6 relative overflow-hidden">
+                {/* Decorative background elements */}
+                <div className="absolute top-20 left-10 w-64 h-64 bg-purple-200/40 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-20 right-10 w-80 h-80 bg-blue-200/40 rounded-full blur-3xl"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-violet-100/30 rounded-full blur-3xl"></div>
+
+                <div className="max-w-7xl mx-auto relative">
                     <div className="text-center mb-16">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 rounded-full text-purple-600 text-sm font-medium mb-6">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full text-purple-600 text-sm font-medium mb-6">
                             Artist Categories
                         </div>
-                        <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                            Find the perfect artist for your project
+                        <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+                            Find the perfect artist<br />for your project
                         </h2>
                         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                             Browse through our diverse categories of talented artists ready to bring your vision to life.
                         </p>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-                        {categories.map((category, index) => (
-                            <div
-                                key={index}
-                                className="p-6 bg-white rounded-2xl border border-gray-100 hover:border-purple-200 hover:shadow-lg hover:shadow-purple-500/5 transition-all group cursor-pointer"
-                            >
-                                <div className="flex items-center justify-between mb-4">
-                                    <span className="text-4xl">{category.icon}</span>
-                                    <span className="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-sm font-medium group-hover:bg-purple-100 transition-colors">
-                                        {category.count} Artists
-                                    </span>
-                                </div>
-                                <h3 className="text-xl font-semibold text-gray-900">{category.name}</h3>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {/* Digital Art */}
+                        <div className="group relative p-6 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 hover:border-purple-200 hover:shadow-xl hover:shadow-purple-500/10 transition-all cursor-pointer">
+                            <div className="absolute top-4 right-4 px-3 py-1.5 bg-purple-50 text-purple-600 rounded-full text-sm font-medium">
+                                500+ Artists
                             </div>
-                        ))}
-                    </div>
+                            <div className="mb-4">
+                                <img
+                                    src="https://cdn-icons-png.flaticon.com/512/1829/1829552.png"
+                                    alt="Digital Art"
+                                    className="w-16 h-16 object-contain"
+                                />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Digital Art</h3>
+                            <p className="text-gray-600 text-sm">Concept art, matte painting, and digital illustration for any creative need.</p>
+                        </div>
 
-                    {/* Painter Character as separator */}
-                    <div className="relative flex justify-center">
-                        <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
-                        <div className="relative bg-gradient-to-b from-gray-50 to-white px-8">
-                            <img
-                                src="/characters/Painter Character.png"
-                                alt="Painter"
-                                className="w-48 h-48 object-contain drop-shadow-lg"
-                            />
+                        {/* Character Design */}
+                        <div className="group relative p-6 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 hover:border-purple-200 hover:shadow-xl hover:shadow-purple-500/10 transition-all cursor-pointer">
+                            <div className="absolute top-4 right-4 px-3 py-1.5 bg-purple-50 text-purple-600 rounded-full text-sm font-medium">
+                                350+ Artists
+                            </div>
+                            <div className="mb-4">
+                                <img
+                                    src="https://cdn-icons-png.flaticon.com/512/6997/6997674.png"
+                                    alt="Character Design"
+                                    className="w-16 h-16 object-contain"
+                                />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Character Design</h3>
+                            <p className="text-gray-600 text-sm">Bring your heroes, villains, and mascots to life with unique character concepts.</p>
+                        </div>
+
+                        {/* Illustration */}
+                        <div className="group relative p-6 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 hover:border-purple-200 hover:shadow-xl hover:shadow-purple-500/10 transition-all cursor-pointer">
+                            <div className="absolute top-4 right-4 px-3 py-1.5 bg-purple-50 text-purple-600 rounded-full text-sm font-medium">
+                                420+ Artists
+                            </div>
+                            <div className="mb-4">
+                                <img
+                                    src="https://cdn-icons-png.flaticon.com/512/2950/2950533.png"
+                                    alt="Illustration"
+                                    className="w-16 h-16 object-contain"
+                                />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Illustration</h3>
+                            <p className="text-gray-600 text-sm">Traditional and digital illustration styles for books, editorial, and advertising.</p>
+                        </div>
+
+                        {/* Logo Design */}
+                        <div className="group relative p-6 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 hover:border-purple-200 hover:shadow-xl hover:shadow-purple-500/10 transition-all cursor-pointer">
+                            <div className="absolute top-4 right-4 px-3 py-1.5 bg-purple-50 text-purple-600 rounded-full text-sm font-medium">
+                                280+ Artists
+                            </div>
+                            <div className="mb-4">
+                                <img
+                                    src="https://cdn-icons-png.flaticon.com/512/2620/2620421.png"
+                                    alt="Logo Design"
+                                    className="w-16 h-16 object-contain"
+                                />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Logo Design</h3>
+                            <p className="text-gray-600 text-sm">Craft a memorable brand identity with custom logo and branding design.</p>
+                        </div>
+
+                        {/* Animation */}
+                        <div className="group relative p-6 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 hover:border-purple-200 hover:shadow-xl hover:shadow-purple-500/10 transition-all cursor-pointer">
+                            <div className="absolute top-4 right-4 px-3 py-1.5 bg-purple-50 text-purple-600 rounded-full text-sm font-medium">
+                                150+ Artists
+                            </div>
+                            <div className="mb-4">
+                                <img
+                                    src="https://cdn-icons-png.flaticon.com/512/2784/2784459.png"
+                                    alt="Animation"
+                                    className="w-16 h-16 object-contain"
+                                />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Animation</h3>
+                            <p className="text-gray-600 text-sm">2D and 3D animation, motion graphics, and explainer videos for your story.</p>
+                        </div>
+
+                        {/* UI/UX Design */}
+                        <div className="group relative p-6 bg-white/80 backdrop-blur-sm rounded-3xl border border-gray-100 hover:border-purple-200 hover:shadow-xl hover:shadow-purple-500/10 transition-all cursor-pointer">
+                            <div className="absolute top-4 right-4 px-3 py-1.5 bg-purple-50 text-purple-600 rounded-full text-sm font-medium">
+                                200+ Artists
+                            </div>
+                            <div className="mb-4">
+                                <img
+                                    src="https://cdn-icons-png.flaticon.com/512/2920/2920349.png"
+                                    alt="UI/UX Design"
+                                    className="w-16 h-16 object-contain"
+                                />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">UI/UX Design</h3>
+                            <p className="text-gray-600 text-sm">User interface and experience design for websites and mobile applications.</p>
                         </div>
                     </div>
                 </div>
