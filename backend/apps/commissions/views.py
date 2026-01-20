@@ -293,7 +293,8 @@ class ReferenceImageUploadView(APIView):
         
         # Save file
         saved_path = default_storage.save(filename, image_file)
-        file_url = request.build_absolute_uri(f"{settings.MEDIA_URL}{saved_path}")
+        # Use relative URL for better compatibility with nginx proxy
+        file_url = f"{settings.MEDIA_URL}{saved_path}"
         
         # Update reference_images JSON field
         images = commission.reference_images or []
