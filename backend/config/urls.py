@@ -23,6 +23,9 @@ urlpatterns = [
     path('api/notifications/', include('apps.notifications.urls')),
 ]
 
+# Always serve media files (nginx proxies /media to backend)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
