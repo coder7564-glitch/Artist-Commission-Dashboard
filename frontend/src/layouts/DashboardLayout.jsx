@@ -138,11 +138,16 @@ export default function DashboardLayout() {
                 )}
               </button>
 
-              {/* User Avatar */}
-              <div className="w-9 h-9 rounded-full bg-primary-100 flex items-center justify-center">
-                <span className="text-primary-600 font-semibold text-sm">
-                  {user?.first_name?.[0] || user?.email?.[0]?.toUpperCase()}
-                </span>
+              {/* User Avatar with Dropdown */}
+              <div className="relative">
+                <button 
+                  onClick={() => navigate('/profile')}
+                  className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-violet-600 flex items-center justify-center hover:opacity-90 transition-opacity cursor-pointer shadow-md"
+                >
+                  <span className="text-white font-semibold text-sm">
+                    {user?.first_name?.[0] || user?.email?.[0]?.toUpperCase()}
+                  </span>
+                </button>
               </div>
             </div>
           </div>
