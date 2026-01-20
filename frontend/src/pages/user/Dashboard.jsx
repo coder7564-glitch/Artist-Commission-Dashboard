@@ -45,23 +45,49 @@ export default function UserDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Welcome Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-morning-darker">
-            Welcome back, {user?.first_name || user?.username}!
-          </h1>
-          <p className="text-morning-gray mt-1">
-            Here's what's happening with your commissions
-          </p>
+      {/* Welcome Header with Character */}
+      {user?.role === 'client' ? (
+        <div className="relative overflow-hidden bg-gradient-to-r from-blue-50 via-violet-50 to-purple-50 rounded-2xl p-6">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div className="flex-1">
+              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">
+                Welcome back, {user?.first_name || user?.username}!
+              </h1>
+              <p className="text-gray-600 mt-2 max-w-md">
+                Manage your commissions and connect with talented artists. Track your orders from request to delivery.
+              </p>
+              <Link
+                to="/commissions/new"
+                className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-violet-600 text-white rounded-full font-medium shadow-lg shadow-blue-500/25 hover:shadow-xl transition-all"
+              >
+                <PlusIcon className="w-5 h-5" />
+                New Commission
+              </Link>
+            </div>
+            <div className="hidden lg:block">
+              <img
+                src="/characters/Client Managing Orders Projects.png"
+                alt="Client managing orders"
+                className="w-48 h-48 object-contain drop-shadow-lg"
+              />
+            </div>
+          </div>
+          {/* Decorative elements */}
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-200/30 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-violet-200/30 rounded-full blur-3xl"></div>
         </div>
-        {user?.role === 'client' && (
-          <Link to="/commissions/new" className="btn-primary inline-flex items-center gap-2">
-            <PlusIcon className="w-5 h-5" />
-            New Commission
-          </Link>
-        )}
-      </div>
+      ) : (
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-morning-darker">
+              Welcome back, {user?.first_name || user?.username}!
+            </h1>
+            <p className="text-morning-gray mt-1">
+              Here's what's happening with your commissions
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -116,8 +142,8 @@ export default function UserDashboard() {
                 <div key={month} className="flex-1 flex flex-col items-center gap-2">
                   <div
                     className={`w-full rounded-xl transition-all ${isCurrentMonth
-                        ? 'bg-gradient-to-t from-purple-500 to-violet-400'
-                        : 'bg-gradient-to-t from-gray-200 to-gray-100'
+                      ? 'bg-gradient-to-t from-purple-500 to-violet-400'
+                      : 'bg-gradient-to-t from-gray-200 to-gray-100'
                       }`}
                     style={{ height: `${heights[index]}%` }}
                   />
