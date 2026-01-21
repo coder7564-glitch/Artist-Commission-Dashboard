@@ -23,6 +23,9 @@ urlpatterns = [
     path('api/payments/', include('apps.payments.urls')),
     path('api/notifications/', include('apps.notifications.urls')),
     
+    # Prometheus metrics
+    path('', include('django_prometheus.urls')),
+    
     # Serve media files (works with gunicorn in production)
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
