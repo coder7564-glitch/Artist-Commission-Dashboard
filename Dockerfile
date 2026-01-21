@@ -46,11 +46,12 @@ RUN mkdir -p /app/staticfiles /app/media /var/log/supervisor
 # Copy frontend build to nginx html directory
 COPY --from=frontend-build /app/frontend/dist /usr/share/nginx/html
 
-# Copy nginx configuration
-COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+# Setup nginx - remove defaults and add our config
+RUN rm -rf /etc/nginx/sites-enabled/* /etc/nginx/sites-available/* /etc/nginx/conf.d/*
+COPY nginx-combined.conf /etc/nginx/conf.d/default.conf
 
-# Remove default nginx site
-RUN rm -f /etc/nginx/sites-enabled/default
+# Test nginx config
+RUN nginx -t
 
 # Create supervisor configuration
 RUN echo '[supervisord]\n\
