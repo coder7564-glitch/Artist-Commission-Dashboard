@@ -78,6 +78,9 @@ stdout_logfile=/var/log/supervisor/gunicorn.out.log\n\
 RUN echo '#!/bin/bash\n\
 set -e\n\
 \n\
+echo "Creating migrations..."\n\
+python manage.py makemigrations users artists commissions payments notifications --noinput\n\
+\n\
 echo "Running migrations..."\n\
 python manage.py migrate --noinput\n\
 \n\

@@ -2,12 +2,7 @@
 
 pipeline {
     agent {
-        label 'doraemon'
-    }
-
-    environment {
-        DOCKER_IMAGE = 'artisthub'
-        DOCKERHUB_USER = 'naman7564'
+        label 'Dorami'
     }
 
     stages {
@@ -29,21 +24,21 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Code Build Stage"
-                sh "docker build -t ${DOCKER_IMAGE}:latest ."
+                sh "docker build -t artisthub:latest ."
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running Tests...'
-                sh "docker run --rm ${DOCKER_IMAGE}:latest python manage.py test --settings=config.settings || echo 'Tests completed'"
+                sh "docker run --rm artisthub:latest python manage.py test --settings=config.settings || echo 'Tests completed'"
             }
         }
 
         stage('Push To DockerHub') {
             steps {
                 echo "Pushing to Docker Hub"
-                docker_push("${DOCKER_IMAGE}", "${DOCKERHUB_USER}", "latest")
+                docker_push("artisthub", "naman7564", "latest")
             }
         }
 
