@@ -24,12 +24,13 @@ services:
       timeout: 5s
       retries: 5
 
-  # Django Backend
-  backend:
+  # ArtistHub App (Frontend + Backend combined)
+  app:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
-    container_name: commission_backend
+    image: naman7564/artisthub:latest
+    container_name: commission_app
     restart: unless-stopped
     environment:
       - DEBUG=${DEBUG:-False}
@@ -39,39 +40,26 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD:-commission_password}
       - MYSQL_HOST=mysql
       - MYSQL_PORT=3306
-      - ALLOWED_HOSTS=localhost,127.0.0.1,backend,80.225.237.255
-      - CORS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,http://localhost,http://frontend,http://80.225.237.255
+      - ALLOWED_HOSTS=localhost,127.0.0.1,80.225.237.255
+      - CORS_ALLOWED_ORIGINS=http://localhost,http://127.0.0.1,http://80.225.237.255
     ports:
+      - "80:80"
       - "8000:8000"
     volumes:
-      - backend_static:/app/staticfiles
-      - backend_media:/app/media
+      - app_static:/app/staticfiles
+      - app_media:/app/media
     depends_on:
       mysql:
         condition: service_healthy
     networks:
       - commission_network
 
-  # React Frontend
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: commission_frontend
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
-    networks:
-      - commission_network
-
 volumes:
   mysql_data:
     driver: local
-  backend_static:
+  app_static:
     driver: local
-  backend_media:
+  app_media:
     driver: local
 
 networks:
